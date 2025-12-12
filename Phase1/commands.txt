@@ -1,0 +1,21 @@
+# Network Configuration
+New-NetIPAddress -InterfaceIndex 5 -IPAddress 192.168.17.20 -PrefixLength 24
+Set-DnsClientServerAddress -InterfaceIndex 5 -ServerAddresses 192.168.17.20
+
+# AD DS Installation
+Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
+Install-ADDSForest -DomainName corp.local -DomainNetbiosName CORP -InstallDNS
+
+# Privileged Account Setup
+New-ADUser -Name "SecAdmin" -SamAccountName secadmin -Enabled $true
+Add-ADGroupMember "Domain Admins" secadmin
+Disable-ADAccount -Identity Administrator
+
+# RDP Hardening
+Add-ADGroupMember "Remote Desktop Users" "Domain Admins"
+
+# OU Structure
+New-ADOrganizationalUnit -Name "Privileged Access"
+New-ADOrganizationalUnit -Name "Tier 0 - Admin Accounts" -Path "OU=Privileged Access,DC=corp,DC=local"
+New-ADOrganizationalUnit -Name "Tier 0 - Servers" -Path "OU=Privileged Access,DC=corp,DC=local"
+
