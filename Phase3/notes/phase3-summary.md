@@ -2,7 +2,7 @@ Phase 3 – Security Event Evidence
 
 This phase captures Active Directory and logon-related security events.
 
-Evidence:
+Domain Controller Evidence:
 - dc1_security_phase3.json
 
 Events captured:
